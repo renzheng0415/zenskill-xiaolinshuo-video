@@ -1,0 +1,25 @@
+{
+  "name": "xiaolinshuo-engine",
+  "version": "1.0.0",
+  "private": true,
+  "description": "小Lin说式横屏口播 B-roll 引擎（Remotion 4.0.408，JSON 镜头表驱动）",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.408",
+    "@remotion/cli": "4.0.408",
+    "@remotion/renderer": "4.0.408",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "remotion": "4.0.408"
+  },
+  "devDependencies": {
+    "@types/react": "19.0.0",
+    "typescript": "5.8.2"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

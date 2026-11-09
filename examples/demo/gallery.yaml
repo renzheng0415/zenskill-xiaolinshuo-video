@@ -1,0 +1,79 @@
+# 组件画廊（selftest 只抽静帧检查每种图表都能渲染）。每镜 1 秒；数字是演示数据，所以标 unspoken_ok。
+# 也是写镜头表的参考：各种 kind / chart 的字段写法都在这里。
+meta: {title: "组件画廊", grade: navy, aiLabel: null, progress: true}
+aroll: {src: assets/aroll.mp4, subject: {x: 0.5, y: 0.37}}
+subs: {srt: input/aroll.srt, max_chars: 16}
+checks: {hard_cuts: [{t: 4.5}], weak: [], gestures: []}
+parts: [{name: full, from: 0, to: 6.0}]
+shots:
+  - id: g1
+    from: 0
+    to: 1.0
+    kind: card
+    bg: {src: footage/demo_bg.jpg}
+    unspoken_ok: true
+    chart:
+      type: bars
+      at: 0.05
+      title: "三年房价（万元/平）"
+      bars:
+        - {label: "2024", value: 6.1, text: "6.1万"}
+        - {label: "2025", value: 5.8, text: "5.8万"}
+        - {label: "2026", value: 5.5, text: "5.5万"}
+  - id: g2
+    from: 1.0
+    to: 2.0
+    kind: card
+    trans: punch
+    unspoken_ok: true
+    chart:
+      type: line
+      at: 1.05
+      title: "成交量走势"
+      points: [{label: "1月", value: 3, text: "3千"}, {label: "4月", value: 5}, {label: "7月", value: 4}, {label: "10月", value: 8, text: "8千"}]
+  - id: g3
+    from: 2.0
+    to: 3.0
+    kind: person
+    framing: right
+    unspoken_ok: true
+    panel:
+      chart:
+        type: compare
+        at: 2.05
+        title: "同样预算"
+        left: {title: "100平", lines: ["紧凑四房", "两卫"]}
+        right: {title: "90平", lines: ["正三房", "两卫"]}
+  - id: g4
+    from: 3.0
+    to: 4.0
+    kind: card
+    trans: iris
+    bg: {src: footage/demo_grid.mp4}
+    unspoken_ok: true
+    chart:
+      type: list
+      at: 3.05
+      title: "挑房三条铁律"
+      rows: [{t: "不买小户型占比高的", at: 3.1}, {t: "不买户型种类多的", at: 3.2}, {t: "刚需别碰大户型", at: 3.3, hl: true}]
+  - id: g5
+    from: 4.0
+    to: 5.0
+    kind: broll
+    trans: wipe
+    media: {src: footage/demo_grid.mp4, start: 0.5}
+    unspoken_ok: true
+    chart:
+      type: timeline
+      at: 4.05
+      title: "政策节点"
+      marks: [{t: "3月", at: 4.1}, {t: "6月", at: 4.2}, {t: "9月", at: 4.3, color: "#5FD3C9"}]
+  - id: g6
+    from: 5.0
+    to: 6.0
+    kind: chapter
+    trans: slam
+    bg: {src: footage/demo_bg.jpg}
+    unspoken_ok: true
+    chapter: {n: "第一条", lines: [{t: "品牌溢价", at: 5.2}, {t: "到底值不值？", at: 5.4, color: "#E8B060"}]}
+    items: [{k: x, t: "划线示例", at: 5.1}]

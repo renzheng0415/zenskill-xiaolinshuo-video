@@ -1,0 +1,20 @@
+# 依赖 / 环境（install.sh 生成）
+node_modules/
+.venv/
+.tools/
+__pycache__/
+*.pyc
+# 安装时下载 / 合成的资源（install.sh 会重新生成）
+engine/public/fonts/*.otf
+engine/public/fonts/*.part
+assets/sfx/*.wav
+# 渲染产物 / 自检工作目录 / 日志
+selftest_run/
+.selftest/
+build_logs/
+render/
+out/
+*.mp4
+.DS_Store
+TASK_PROMPT.md
+PROGRESS.md

@@ -1,0 +1,54 @@
+# 3 镜自检样片（6 秒）。时间 = A-roll 绝对秒，24fps。素材全部由 make_inputs.sh 合成（CC0）。
+meta:
+  title: "DEMO · 小Lin说式横屏口播"
+  grade: navy          # B-roll 调成海军蓝/青，跟专业场景 A-roll 对齐
+  aiLabel: null        # 默认不显示 AI 标
+  progress: true       # 顶部全片进度条
+aroll:
+  src: assets/aroll.mp4
+  subject: {x: 0.5, y: 0.37}     # A-roll 里人物脸部中心（0–1）
+  drift: 0.015
+subs: {srt: input/aroll.srt, max_chars: 16}
+checks:
+  hard_cuts: [{t: 4.5, cover: [4.1, 4.9]}]
+  weak: []
+  gestures: [{from: 2.3, to: 2.9}]
+parts:                 # 分段渲染（逐章给用户看）；必须首尾相接覆盖全片
+  - {name: open, from: 0, to: 2.0}
+  - {name: ch1, from: 2.0, to: 6.0}
+music: {src: music/bed.wav, gain_db: -18, bpm: 120, beat_offset: 0, loop_beats: 4}
+sfx: {auto: true, extra: []}
+cover:
+  bg: footage/demo_bg.jpg
+  kicker: "2026"
+  title: ["小Lin说式"]
+  highlight: "横屏口播"
+  lines: ["6 秒自检样片"]
+shots:
+  # 1 开场：人物在专业场景里 wide，慢推
+  - id: s1
+    from: 0
+    to: 2.0
+    kind: person
+    framing: wide
+    push: {at: 0.3, factor: 1.06, dur: 1.2}
+    tags: [{t: "2026年", at: 0.4}]
+  # 2 人物切到左边，手势起点推近；右边玻璃卡出大数字（与口播「108%」一致）
+  - id: s2
+    from: 2.0
+    to: 3.9
+    kind: person
+    framing: left
+    trans: cut
+    push: {at: 2.3, factor: 1.08, dur: 0.6}
+    panel:
+      chart: {type: bignum, at: 3.2, text: "108%", label: "价格涨了"}
+  # 3 实拍 B-roll 盖住 4.5s 硬切；偶尔的圆形人物小窗
+  - id: s3
+    from: 3.9
+    to: 6.0
+    kind: broll
+    trans: whip
+    media: {src: footage/demo_city.mp4, start: 0}
+    tags: [{t: "记住这三点", at: 4.3}]
+    pip: {x: 1480, y: 600, d: 300}
