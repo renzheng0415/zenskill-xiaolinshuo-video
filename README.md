@@ -6,6 +6,12 @@
 
 完整流程、规则与命令见 **[SKILL.md](SKILL.md)**。
 
+### 风格规则（v2）
+镜头表现在按"句型"自动起草：开场钩子、术语、主角数字、数字序列、对比、因果链、清单、故事、设问、结论各有对应的镜头写法，
+规则来自对小Lin说官方参考片的逐段拆解（`references/xiaolin_style_rules.md`）。铁律不变：硬切/弱口型必须盖 B-roll，屏幕数字必须和口播一致，只用可商用素材，-16 LUFS。
+可选：先在 ChatCut 用 Talking-Head Edit Recreation 粗剪，再回本地质检出片（SKILL.md 步骤 2B）。
+
+
 ## 1. 安装（macOS / Linux，一条命令，可重复运行）
 
 ```bash
@@ -81,5 +87,6 @@ requirements.txt    Python 依赖
 engine/             Remotion 4.0.408 引擎（package.json + package-lock.json + src/）
 scripts/            各步骤脚本 + selftest.sh + env.sh
 examples/demo/      自检 demo（合成输入脚本、3 镜镜头表、组件画廊）
+references/         小Lin说风格自动分镜规则与官方参考片文字拆解（不含截图）
 assets/sfx/         合成音效（install.sh 生成）
 ```
