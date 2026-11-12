@@ -1,6 +1,6 @@
 ---
 name: zenskill-xiaolinshuo-video
-description: 小Lin说式横屏口播成片流水线（16:9 1920×1080 / 24fps）。当用户已经有定稿的口播 A-roll（数字人或真人出镜 mp4 + 配音 wav + SRT，可选硬切断点 breakpoints.tsv / 手势表 gestures.tsv），想做成「小Lin说」风格的财经/知识科普横屏视频时使用：人物左右切换+推镜、另一侧出图表/实拍，B-roll 跟着 A-roll 走并盖住硬切与弱口型，可商用实拍素材检索与署名登记，音乐床+音效混到 -16 LUFS，分段渲染→拼接→流式校验→封面→<95MB 聊天版。不适用于竖屏短视频、纯动画解说或还没定稿的口播稿；内置从小Lin说官方参考片提炼的自动分镜规则（句型→镜头），也可先用 ChatCut 粗剪再回本地质检。
+description: 小Lin说式横屏口播成片流水线（16:9 1920×1080 / 24fps）。当用户已经有定稿的口播 A-roll（数字人或真人出镜 mp4 + 配音 wav + SRT，可选硬切断点 breakpoints.tsv / 手势表 gestures.tsv），想做成「小Lin说」风格的财经/知识科普横屏视频时使用：人物左右切换+推镜、另一侧出图表/实拍，B-roll 跟着 A-roll 走并盖住硬切与弱口型，可商用实拍素材检索与署名登记，音乐床+音效混到 -16 LUFS，分段渲染→拼接→流式校验→封面→<95MB 聊天版。不适用于竖屏短视频、纯动画解说或还没定稿的口播稿；内置从小Lin说官方参考片提炼的自动分镜规则（句型→镜头），也可先用 ChatCut 粗剪再回本地质检。精修镜头表前按选题补画法表和事实文件；官方页可用网页截图（图片社照片须模糊），图表须能追溯到来源。
 ---
 
 # zenskill-xiaolinshuo-video · 小Lin说式横屏口播
@@ -136,6 +136,21 @@ shots:                      # 首尾相接、无空隙；时间吸附到 1/24 s
 **引擎表达不了的参考片手法**（不要硬凑，记在 `build/shotlist_review.md` 备注里，或交给 ChatCut 路径）：人物居中两侧各一张卡、圆角矩形小窗、一镜内多次台阶推近、片名溶解转场、单位换算型数字（违反铁律，永远不做）。
 
 
+
+## 3B. 每期按选题定制画法（讲解画面不要像套模板）
+
+完整做法：`references/xiaolin_treatment.md`；版式怎么用现有组件表达：`references/layout_mapping.md`；上屏数字和原文怎么查：`references/research.md`。
+**第 0 节铁律优先**。这一步不改口播，也不换引擎。
+
+镜头表模板出来后、精修图表之前，先在 `build/treatment.md` 写一张表：场景 | 覆盖哪几句 | 骨架 | 背景（选题真实画面） | 道具和动作 | 事实编号。检查 4 点：
+
+- 每个图形场景至少有一样本期专属的东西（选题照片、本期道具、真实 Logo 或官方截图）。只有骨架加数字，不合格。
+- 道具要承担意思，拿掉之后意思变弱才算选对；相邻场景的画法不要重样。
+- 需要上屏的数字、原文、截图先写入 `build/facts.md`（模板 `templates/facts_template.md`）。查不到就换画法，不上假原文、不上拼凑表。
+- 本引擎没有的版式（原文荧光笔、饼图、关系图、白卡等）按 `layout_mapping.md` 近似，或写进 `build/shotlist_review.md` / ChatCut 备注，回来仍过 `compile_shotlist.py`。
+
+开场钩子、设问、结论仍然优先给全屏人物。
+
 ## 4. 步骤与命令
 
 ```bash
@@ -166,6 +181,8 @@ $XL_PY $S/build_shotlist.py $P --srt $P/input/aroll.srt --breakpoints $P/input/b
 - 术语句后面补术语卡，因果链补逐步面板；
 - 每改完一轮跑 `compile_shotlist.py --draft`，0 ERROR 才往下走。
 
+**按 3B 补画法（不要只换数字）**：句型定完后，给每个图形场景写画法表和事实文件。底图换成选题真实画面或官方截图，图表数字必须能在 `build/facts.md` 找到来源；只有骨架和数字的镜头要补背景或改回人物+字幕。本引擎做不到的画法记入 `build/shotlist_review.md`，不要为此改铁律，也不要改已经定稿的口播。
+
 
 ### 步骤 2B（可选）· ChatCut 粗剪 → 回本地质检
 
@@ -177,6 +194,21 @@ $XL_PY $S/build_shotlist.py $P --srt $P/input/aroll.srt --breakpoints $P/input/b
 4. 粗剪出来后，把它的**镜头切点、每镜类型、图表文字**抄回本项目的 `shotlist.yaml`（时间仍以 A-roll 绝对秒为准），素材换成可商用来源并登记 `credits.json`。
 5. 回到本地：`compile_shotlist.py`（硬切/弱口型覆盖、数字一致、许可）→ 步骤 6 混音（-16 LUFS / ≤ -1 dBTP）→ 步骤 7 先出 15 秒样片。
 6. 如果用户坚持直接用 ChatCut 导出的成片：至少跑一遍 `verify.py`（帧数/响度/音画同步），并人工对照 `checks.hard_cuts` 和字幕逐个核对硬切是否被盖住、屏幕数字是否与口播一致、素材许可是否可商用；任何一项不过就回本地流水线重做那一段。
+
+### 步骤 2C · 事实文件 + 官方页截图（和步骤 2/3 一起做）
+
+图形镜头上屏前，把数字、原文、照片、截图写入 `$P/build/facts.md`（抄 `templates/facts_template.md`）。规则见 `references/research.md`：查不到不上屏；地方数据用当地官方口径；推算数字只有口播也用同一写法才能上屏。
+
+需要官方页面、公告或报道的真实画面时，用网页截图，不要自己重排成假页面：
+
+```bash
+node $S/web_shot.mjs "<url>" $P/footage_raw/<名字>.png --w 1440 --h 1500 --wait 9 \
+     --boxes "要高亮的原文" --blur "article img, figure img"
+$XL_PY $S/commons_photo.py search "查询词" --n 6
+$XL_PY $S/commons_logo.py $P/footage_raw/logos "名称=File:Xxx.svg"
+```
+
+截图里的图片社照片必须模糊。照片和 Logo 仍要写入 `credits.json`，再走步骤 4 conform。Logo 只在讲到该产品或机构时用来指代，不改色、不当封面装饰。
 
 ### 步骤 3 · 找素材（只用可商用来源）+ 登记署名
 ```bash
@@ -216,6 +248,7 @@ $XL_PY $S/render_parts.py $P --parts ch1 --review   # 逐章：渲一章给用�
 $XL_PY $S/render_parts.py $P --all                  # 用户说整片时
 ```
 同一个 Film 合成按帧段渲（每 300 帧一块、JPEG 序列、失败自动重试 3 次），中间片 crf12 无音频，帧数核对 = 段长。`XL_CONCURRENCY` 控制并发。
+样片和逐章抽帧，按 `references/xiaolin_visual_checklist.md` 人眼过一遍：主体够大、当前项最亮、一帧标签不超过两个、字幕和脸没有挡住、数字与口播原样一致、图形镜有本期专属画面。白纸版式、竖条小窗、卡片墙跟拍本引擎做不到，不要硬凑，也不要为了「更像原片」改铁律。
 预览可用 `cd engine && npx remotion studio src/index.ts --public-dir $P/public`（props 粘 `build/film.json`）。
 
 ### 步骤 8 · 封面（可选）
@@ -223,6 +256,7 @@ $XL_PY $S/render_parts.py $P --all                  # 用户说整片时
 $XL_PY $S/cover.py $P [--bg-from footage/x.mp4@1.5 | --bg footage/x.jpg] [--show-safe]
 ```
 → `render/cover_16x9.png`、`render/cover_9x16.png`（文字居中、在 3:4 安全区内）。
+封面和栏目条要先写判断或事实对比，不要用「最大的误区」「你还不知道」「90%买房人太晚知道」「一口气了解」这类公式外壳，也不要写成广告口气。
 
 ### 步骤 9 · 拼接 + 聊天版
 ```bash
@@ -248,7 +282,7 @@ $XL_PY $S/credits_caption.py $P [--all]     # CC BY / BY-SA 等需要署名的�
 ## 5. 与用户的交互节点
 
 1. 收到 A-roll 后：报告体检结果（帧率/时长/硬切数/弱口型句/手势数）。
-2. 镜头表模板 + 审阅表 → 说明版式思路。
+2. 镜头表模板 + 审阅表 → 说明版式思路；同时给出画法表和事实文件里已核对、未核对的条目。
 2a. （走 ChatCut 路径时）任何要花 ChatCut 积分的生成/导出，先报预估积分 → 用户确认 → 再做。
 3. **音乐 2–3 首候选**试听 → 用户选。
 4. **~15 秒样片** → 用户确认风格（调色、字号、节奏）。
@@ -266,6 +300,9 @@ $XL_PY $S/credits_caption.py $P [--all]     # CC BY / BY-SA 等需要署名的�
 - 参考片会把口播"1万"在屏幕写成"10,000"——照抄会被数字检查拦下（铁律：数字原样一致）。主数字永远用口播写法。
 - 参考片人物从不换边、小窗用得多；我们按铁律：有面板才左右换、小窗 ≤10% 镜头。别因为"参考片这样"去改铁律。
 - 自动模板常把每个数字都做成大数字卡；参考片只给"这句话就是在讲这个数"的数字做图，串烧里顺带的数字只留字幕。
+- 只换数字、不换画法，讲解画面会像套模板。图形镜要有本期专属的照片、截图或道具；查不到来源就换画法，不要编原文。
+- 不要为了「更像小Lin说」去加 AI 角标、粉色胶片孔，或把口播里的「1万」在屏幕写成「约 10,000」。这些都和铁律冲突。
+- 涉及中国疆域的地图，不要用第三方世界示意图充数；没有标准地图就改用别的画法。
 
 ## 7. 文件索引
 
@@ -281,3 +318,10 @@ $XL_PY $S/credits_caption.py $P [--all]     # CC BY / BY-SA 等需要署名的�
 | `examples/demo/` | 自检用 demo（输入生成脚本、3 镜镜头表、组件画廊） |
 | `references/xiaolin_style_rules.md` | 小Lin说风格自动分镜规则（句型→镜头决策树、节奏目标、引擎做不到的清单） |
 | `references/xiaolin_reference_analysis.md` | 官方参考片拆解（时间码 + 画面描述，纯文字，不含截图） |
+| `references/xiaolin_treatment.md` | 每期画法设计表（选题真实画面 + 承担意思的道具） |
+| `references/xiaolin_visual_checklist.md` | 样片/逐章人眼审片要点（标明本引擎做不到的） |
+| `references/research.md` | 上屏资料检索、来源分级、网页截图和 Logo |
+| `references/layout_mapping.md` | 对方版式到本引擎组件的对应表 |
+| `templates/facts_template.md` | 项目事实文件模板（复制到 `build/facts.md`） |
+| `scripts/web_shot.mjs` `commons_photo.py` `commons_logo.py` | 官方页截图、Commons 照片和 Logo（改写自 howoneai，MIT，见 NOTICE.md） |
+| `NOTICE.md` | 第三方 MIT 版权与许可声明 |
